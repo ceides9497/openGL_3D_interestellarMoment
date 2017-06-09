@@ -55,9 +55,8 @@ def draw
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
   glPushMatrix
-    glTranslate(300.0, -400.0,-950.0)
-    glRotatef(@spin/100, 0.0, 1.0, 0.0)
-    glScalef(700.0, 700.0, 700.0)
+    glTranslate(300.0, -400.0,-300.0)
+    glScalef(200.0, 200.0, 200.0)
     @planet.draw
   glPopMatrix
 
@@ -107,20 +106,20 @@ if @up < 30
   end
 else
   glPushMatrix
-    glTranslate(0.0, -50.0, -300.0)
+    glTranslate(@colision, @colision-50.0,-(@colision) -300.0)
     glRotatef(180, 1.0, 0.0, 0.0)
-    glRotatef(-(@spin/@freno), 0.0, 1.0, 0.0)
+    glRotatef(-(@spin), 1.0, 1.0, 1.0)
     glScalef(50.0, 50.0, 50.0)
     @endurance.draw
   glPopMatrix
 
   glPushMatrix
-    glTranslate(15.0, -120.0, -300.0)
-    glRotatef((45+@time)/@freno, 0.0, 1.0, 0.0)
+    glTranslate(15.0-@colision, -@colision-120.0, @colision-300.0)
+    glRotatef((45+@time), 1.0, 1.0, 1.0)
     glScalef(10.0, 10.0, 10.0)
     @ranger.draw
   glPopMatrix
-  @freno = @freno +0.1
+  @colision = @colision +0.1
 end
 
   glutSwapBuffers
@@ -137,22 +136,16 @@ def reshape(width, height)
 end
 
 def idle
-  if @freno >= 100
-    @spin = @spin
-    @time = @time
-  else
     @spin = @spin + 1
 
     if @spin > 360.0
       @spin = @spin - 360.0
     end
 
-    @time = @time + 1
-    if @time > 100
-      @up = @up + 0.1
-    end
+  @time = @time + 1
+  if @time > 100
+    @up = @up + 0.1
   end
-
 
   @frame_time = glutGet(GLUT_ELAPSED_TIME) - @frame_start
 
@@ -181,7 +174,7 @@ end
 @frame_count = 0
 @time = -300.0
 @up = 0
-@freno = 1
+@colision = 1
 
 #PlaySound("music/notTimeForCaution.mp3", NULL, SND_ASYNC|SND_FILENAME|SND_LOOP)
 load_objects
